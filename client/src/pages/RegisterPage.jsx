@@ -9,7 +9,11 @@ function RegisterPage() {
     const [password,setPassword] = useState('')
     function registerUser(e) {
         e.preventDefault()
-        axios.get('http://localhost:3000/test')
+        axios.post('/register',{
+            name,
+            email,
+            password
+        } )
         console.log('Registering user')
     }
     return (<>
