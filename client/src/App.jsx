@@ -6,13 +6,16 @@ import IndexPage from './pages/IndexPage'
 import Layout from './pages/Layout'
 import LoginPage from './pages/LoginPage'
 import RegisterPage from './pages/RegisterPage'
+import { UserContextProvider } from './UserContext'
 
 function App() {
 
   axios.defaults.baseURL = 'http://localhost:3000'
+  axios.defaults.withCredentials = true;
  
 
   return (<>
+  <UserContextProvider>
     <Routes>
       <Route path='/' element={<Layout/>}>
       <Route index element={<IndexPage/>} />
@@ -22,6 +25,7 @@ function App() {
       
 
     </Routes>
+    </UserContextProvider>
 
 
 
