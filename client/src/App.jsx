@@ -7,11 +7,18 @@ import Layout from './pages/Layout'
 import LoginPage from './pages/LoginPage'
 import RegisterPage from './pages/RegisterPage'
 import { UserContextProvider } from './UserContext'
+import { useEffect } from 'react'
+
+axios.defaults.baseURL = 'http://localhost:3000'
+  axios.defaults.withCredentials = true;
 
 function App() {
 
-  axios.defaults.baseURL = 'http://localhost:3000'
-  axios.defaults.withCredentials = true;
+  
+
+
+ 
+
  
 
   return (<>

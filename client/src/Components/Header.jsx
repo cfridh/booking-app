@@ -1,6 +1,9 @@
+import { useContext } from 'react'
 import { Link } from 'react-router-dom'
+import { UserContext } from '../UserContext'
 
 export default function Header () {
+  const {user} = useContext(UserContext)
 return (
 
     <header className='flex justify-between '>
@@ -33,6 +36,7 @@ return (
 
 
 </div>
+{user ? <div className='text-gray-500'>{user.name}</div> : <div className='text-gray-500'>Login</div>}
 </Link>
 </header>
 

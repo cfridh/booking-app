@@ -4,6 +4,7 @@ const  mongoose  = require('mongoose');
 const User = require('./models/User');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const cookieParser = require('cookie-parser');
 require('dotenv').config();
 const app = express();
 
@@ -11,6 +12,7 @@ const bcryptSalt = bcrypt.genSaltSync(8);
 
 
 app.use(express.json());
+app.use(cookieParser());
 
 app.use(cors({
   credentials: true,
@@ -49,15 +51,31 @@ app.post('/login', async (req, res) => {
   else {
     const isValidPassword = bcrypt.compareSync(password, userDoc.password)
     if (isValidPassword) {
-      jwt.sign({email:userDoc.email, id:userDoc._id}, process.env.JWT_SECRET, {}, (err, token) => {
+      jwt.sign({email:userDoc.email, id:userDoc._id, }, process.env.JWT_SECRET, {}, (err, token) => {
         if (err) throw err;
          res.cookie('token', token).json(userDoc)
       })
     } else {
       return res.status(422).json({error: 'Invalid password'})
-    }
+    } 
   }
 });
+
+app.get('/profile',  (req, res) => {
+  const {token} = req.cookies;
+    if (!token) {
+      return res.status(401).json({error: 'Unauthorized'})
+      res.json(null)
+    } else {
+      jwt.verify(token, process.env.JWT_SECRET, {}, async (err, userData) => {
+        if (err) throw err;
+        const {name,email,_id} = await User.findById(userData.id)
+        res.json({name,email,_id})
+        })}
+});
+
+  
+
 
 
 app.listen(3000, () => {
