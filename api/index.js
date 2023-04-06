@@ -110,6 +110,43 @@ for (let i = 0; i < req.files.length; i++) {
   res.json(uploadedFiles)
 });
 
+
+app.post('/places', (req,res) => {
+ // mongoose.connect(process.env.MONGO_URL);
+  const {token} = req.cookies;
+  const {
+    title,
+    address,
+    addedPhotos,
+    description,
+    price,
+    perks,
+    extraInfo,
+    checkIn,
+    checkOut,
+    maxGuests,
+  } = req.body;
+ 
+  jwt.verify(token, process.env.JWT_SECRET, {}, async (err, userData) => {
+    if (err) throw err;
+    const placeDoc = await Place.create({
+      owner:userData.id,price,
+      title,
+      address,
+      addedPhotos,
+      description,
+      perks,
+      extraInfo,
+      checkIn,
+      checkOut,
+      maxGuests,
+      
+    })
+    res.json(placeDoc);
+  })
+})
+
+
 app.listen(3000, () => {
   console.log('Example app listening on port 3000!');
 });
