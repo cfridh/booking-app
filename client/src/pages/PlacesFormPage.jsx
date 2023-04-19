@@ -5,9 +5,12 @@ import {Link, Navigate, useLocation, useParams} from 'react-router-dom'
 import Perks from '../Perks'
 import PhotosUploader from '../PhotosUploader'
 import AccountNav from '../AccountNav'
+import axios from "axios";
+import { response } from 'express'
 
 export default function PlacesFormPage (){
 
+const {id} = useParams()
 
 const [title,setTitle] = useState('')
 const [address,setAddress] = useState('')
@@ -20,6 +23,26 @@ const [checkIn,setCheckIn] = useState('')
 const [checkOut,setCheckOut] = useState('')
 const [maxguests,setMaxGuests] = useState('')
 const [redirect,setRedirect] = useState(false);
+
+useEffect(() => {
+if(!id) { 
+    return;
+}
+    axios.get(`/places/${id}`).then(response => {
+        const{data} = response;
+        setTitle(data.title)
+        setAddress(data.address)
+        setAddedPhotos(data.addedPhotos)
+        setDescription(data.description)
+        setPerks(data.perks)
+        setExtraInfo(data.extraInfo)
+        setCheckIn(data.checkIn)
+        setCheckOut(data.checkOut)
+        setMaxGuests(data.maxguests)
+
+    })
+    
+}, [id] )
 
 
 function inputHeader(text) {
@@ -44,22 +67,26 @@ function preInput(header, description) {
 }
 
 
-async function addNewPlace(ev) {
-    ev.preventDefault()
-    
-    await axios.post('/places', {
-        title,
-        address,
-        addedPhotos,
-        description,
-        perks,
-        extraInfo,
-        checkIn,
-        checkOut,
-        maxguests
-    })
-    setRedirect(true);
-}
+async function savePlace(ev) {
+    ev.preventDefault();
+    const placeData = {
+      title, address, addedPhotos,
+      description, perks, extraInfo,
+      checkIn, checkOut, maxGuests, price,
+    };
+    if (id) {
+      // update
+      await axios.put('/places', {
+        id, ...placeData
+      });
+      setRedirect(true);
+    } else {
+      // new place
+      await axios.post('/places', placeData);
+      setRedirect(true);
+    }
+
+  }
 
 if (redirect) {
     return <Navigate to={'/account/places'} />
@@ -70,7 +97,7 @@ if (redirect) {
         
          <div className="">
          <AccountNav/>
-        <form onSubmit={addNewPlace}>
+        <form onSubmit={savePlace}>
             {preInput('Title','Title for your place')}
             
             <input type="text" value={title} onChange={ev => setTitle(ev.target.value) } placeholder='title' />

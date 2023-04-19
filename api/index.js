@@ -13,7 +13,7 @@ require('dotenv').config();
 const app = express();
 
 const bcryptSalt = bcrypt.genSaltSync(8);
-
+const jwtSecret = process.env.JWT_SECRET
 
 app.use(express.json());
 app.use(cookieParser());
@@ -111,41 +111,56 @@ for (let i = 0; i < req.files.length; i++) {
 });
 
 
-app.post('/places', (req,res) => {
- // mongoose.connect(process.env.MONGO_URL);
+app.post('/api/places', (req,res) => {
+  mongoose.connect(process.env.MONGO_URL);
   const {token} = req.cookies;
   const {
-    title,
-    address,
-    addedPhotos,
-    description,
-    price,
-    perks,
-    extraInfo,
-    checkIn,
-    checkOut,
-    maxGuests,
+    title,address,addedPhotos,description,price,
+    perks,extraInfo,checkIn,checkOut,maxGuests,
   } = req.body;
- 
-  jwt.verify(token, process.env.JWT_SECRET, {}, async (err, userData) => {
+  jwt.verify(token, jwtSecret, {}, async (err, userData) => {
     if (err) throw err;
     const placeDoc = await Place.create({
       owner:userData.id,price,
-      title,
-      address,
-      addedPhotos,
-      description,
-      perks,
-      extraInfo,
-      checkIn,
-      checkOut,
-      maxGuests,
-      
-    })
+      title,address,photos:addedPhotos,description,
+      perks,extraInfo,checkIn,checkOut,maxGuests,
+    });
     res.json(placeDoc);
-  })
-})
+  });
+});
 
+
+app.get('/places', async (req,res) => {
+  mongoose.connect(process.env.MONGO_URL);
+  res.json( await Place.find() );
+});
+
+app.get('/places/:id', async (req,res) => {
+  mongoose.connect(process.env.MONGO_URL);
+  const {id} = req.params;
+  res.json(await Place.findById(id));
+});
+
+app.put('/places', async (req,res) => {
+  mongoose.connect(process.env.MONGO_URL);
+  const {token} = req.cookies;
+  const {
+    id, title,address,addedPhotos,description,
+    perks,extraInfo,checkIn,checkOut,maxGuests,price,
+  } = req.body;
+  jwt.verify(token, jwtSecret, {}, async (err, userData) => {
+    if (err) throw err;
+    const placeDoc = await Place.findById(id);
+    if (userData.id === placeDoc.owner.toString()) {
+      placeDoc.set({
+        title,address,photos:addedPhotos,description,
+        perks,extraInfo,checkIn,checkOut,maxGuests,price,
+      });
+      await placeDoc.save();
+      res.json('ok');
+    }
+  });
+});
 
 app.listen(3000, () => {
   console.log('Example app listening on port 3000!');
