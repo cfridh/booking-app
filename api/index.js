@@ -111,7 +111,7 @@ for (let i = 0; i < req.files.length; i++) {
 });
 
 
-app.post('/api/places', (req,res) => {
+app.post('/places', (req,res) => {
   mongoose.connect(process.env.MONGO_URL);
   const {token} = req.cookies;
   const {
@@ -130,9 +130,13 @@ app.post('/api/places', (req,res) => {
 });
 
 
-app.get('/places', async (req,res) => {
+app.get('/user-places', (req,res) => {
   mongoose.connect(process.env.MONGO_URL);
-  res.json( await Place.find() );
+  const {token} = req.cookies;
+  jwt.verify(token, jwtSecret, {}, async (err, userData) => {
+    const {id} = userData;
+    res.json( await Place.find({owner:id}) );
+  });
 });
 
 app.get('/places/:id', async (req,res) => {
@@ -160,6 +164,11 @@ app.put('/places', async (req,res) => {
       res.json('ok');
     }
   });
+});
+
+app.get('/places', async (req,res) => {
+  mongoose.connect(process.env.MONGO_URL);
+  res.json( await Place.find() );
 });
 
 app.listen(3000, () => {
