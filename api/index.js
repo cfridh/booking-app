@@ -1,6 +1,8 @@
 const express = require('express');
 const cors = require('cors');
-const  mongoose  = require('mongoose');
+const mongoose  = require('mongoose');
+const Place = require('./models/Place.js');
+const Booking = require('./models/Booking.js');
 const User = require('./models/User');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
@@ -173,7 +175,7 @@ app.get('/places', async (req,res) => {
   res.json( await Place.find() );
 });
 
-app.post('/api/bookings', async (req, res) => {
+app.post('/bookings', async (req, res) => {
   mongoose.connect(process.env.MONGO_URL);
   const userData = await getUserDataFromReq(req);
   const {
@@ -189,7 +191,7 @@ app.post('/api/bookings', async (req, res) => {
   });
 });
 
-app.get('/api/bookings', async (req,res) => {
+app.get('/bookings', async (req,res) => {
   mongoose.connect(process.env.MONGO_URL);
   const userData = await getUserDataFromReq(req);
   res.json( await Booking.find({user:userData.id}).populate('place') );
