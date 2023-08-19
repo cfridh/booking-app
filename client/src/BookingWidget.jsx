@@ -21,7 +21,7 @@ export default function BookingWidget({place}) {
 
   let numberOfNights = 0;
   if (checkIn && checkOut) {
-    numberOfNights = differenceInCalendarDays(new Date(checkOut), new Date(checkIn));
+    numberOfNights = differenceInCalendarDays(new Date(checkOut), new Date(checkIn)); // date-fns
   }
 
 
@@ -48,7 +48,7 @@ export default function BookingWidget({place}) {
         Price: ${place.price} / per night
       </div>
 
-      
+
       <div className="border rounded-2xl mt-4">
         <div className="flex">
           <div className="py-3 px-4">
