@@ -16,7 +16,7 @@ export default function PlacesFormPage() {
   const [checkIn,setCheckIn] = useState('');
   const [checkOut,setCheckOut] = useState('');
   const [maxGuests,setMaxGuests] = useState(1);
-  const [price,setPrice] = useState(100);
+  const [price,setPrice] = useState(10);
   const [redirect,setRedirect] = useState(false);
   useEffect(() => {
     if (!id) {

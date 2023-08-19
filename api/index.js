@@ -123,7 +123,7 @@ app.post('/places', (req,res) => {
     const placeDoc = await Place.create({
       owner:userData.id,price,
       title,address,photos:addedPhotos,description,
-      perks,extraInfo,checkIn,checkOut,maxGuests,
+      perks,extraInfo,checkIn,checkOut,maxGuests,price,
     });
     res.json(placeDoc);
   });
