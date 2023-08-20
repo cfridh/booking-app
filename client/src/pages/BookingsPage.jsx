@@ -20,11 +20,11 @@ export default function BookingsPage() {
 
   return (
     <div>
-      <div>Bookingpage</div>
+      <div>Bookingpage2</div>
       <AccountNav />
       <div>
         {bookings?.length > 0 && bookings.map(booking => (
-          <Link to={`/account/bookings/${booking._id}`} className="flex gap-4 bg-gray-200 rounded-2xl overflow-hidden">
+          <Link to={`/account/bookings/${booking._id}`} className="flex gap-4 mb-4 bg-gray-200 rounded-2xl overflow-hidden">
             <div className="w-48">
               <PlaceImg place={booking.place} />
             </div>
