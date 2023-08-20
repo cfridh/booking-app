@@ -27,7 +27,17 @@ app.use(cors({
 
 //console.log(process.env.Mongo_URL)
 
-mongoose.connect(process.env.Mongo_URL); // Your MongoDB connection string
+mongoose.connect(process.env.Mongo_URL); // MongoDB connection string
+
+
+function getUserDataFromReq(req) {
+  return new Promise((resolve, reject) => {
+    jwt.verify(req.cookies.token, jwtSecret, {}, async (err, userData) => {
+      if (err) throw err;
+      resolve(userData);
+    });
+  });
+}
 
 app.get('/test', (req, res) => {
   res.json('Hello World!');
