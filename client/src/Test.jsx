@@ -1,11 +1,12 @@
-import PhotosUploader from "../PhotosUploader.jsx";
-import Perks from "../Perks.jsx";
+import PhotosUploader from "./PhotosUploader.jsx";
+import Perks from "./Perks.jsx";
 import {useEffect, useState} from "react";
 import axios from "axios";
-import AccountNav from "../AccountNav";
+import AccountNav from "./AccountNav";
 import {Navigate, useParams} from "react-router-dom";
+import PlacesPage from "./pages/PlacesPage.jsx";
 
-export default function PlacesFormPage() {
+export default function test() {
   const {id} = useParams();
   const [title,setTitle] = useState('');
   const [address,setAddress] = useState('');
@@ -88,7 +89,7 @@ export default function PlacesFormPage() {
         <input type="text" value={title} onChange={ev => setTitle(ev.target.value)} placeholder="title, for example: My lovely apt"/>
         {preInput('Address', 'Address to this place')}
         <input type="text" value={address} onChange={ev => setAddress(ev.target.value)}placeholder="address"/>
-        {preInput('Photos','3-5 photos is enough, but you can add more')}
+        {preInput('Photos','more = better')}
         <PhotosUploader addedPhotos={addedPhotos} onChange={setAddedPhotos} />
         {preInput('Description','description of the place')}
         <textarea value={description} onChange={ev => setDescription(ev.target.value)} />
@@ -127,6 +128,7 @@ export default function PlacesFormPage() {
         </div>
         <button className="primary my-4">Save</button>
       </form>
+      <PlacesPage />
     </div>
   );
 }

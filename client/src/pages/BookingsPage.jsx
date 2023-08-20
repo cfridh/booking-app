@@ -20,6 +20,7 @@ export default function BookingsPage() {
 
   return (
     <div>
+      <div>Bookingpage</div>
       <AccountNav />
       <div>
         {bookings?.length > 0 && bookings.map(booking => (

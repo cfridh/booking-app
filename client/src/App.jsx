@@ -3,7 +3,7 @@ import axios from 'axios'
 import { Routes, Route } from 'react-router-dom'
 import './App.css'
 import IndexPage from './pages/IndexPage'
-import Layout from './pages/Layout'
+import Layout from './Layout'
 import LoginPage from './pages/LoginPage'
 import RegisterPage from './pages/RegisterPage'
 import { UserContextProvider } from './UserContext'
@@ -11,7 +11,7 @@ import { useEffect } from 'react'
 import ProfilePage from './pages/ProfilePage'
 import PlacesPage from './pages/PlacesPage'
 import PlacesFormPage from './pages/PlacesFormPage'
-import PlacePage from './pages/PlacesPage'
+import PlacePage from './pages/PlacePage'
 import BookingsPage from './pages/BookingsPage'
 import BookingPage from './pages/BookingPage'
 
@@ -42,6 +42,7 @@ function App() {
       <Route path="/place/:id" element={<PlacePage />} />
       <Route path="/account/bookings" element={<BookingsPage />} />
       <Route path="/account/bookings/:id" element={<BookingPage />} />
+      
     
 
       </Route>
